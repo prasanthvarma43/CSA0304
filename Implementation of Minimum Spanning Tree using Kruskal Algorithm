@@ -1,0 +1,16 @@
+#include <stdio.h>
+#define E 5
+int p[5];
+struct Edge {int u,v,w;} e[E]={{0,1,10},{0,2,6},{0,3,5},{2,3,4},{3,4,2}};
+int find(int x){return p[x]==x?x:(p[x]=find(p[x]));}
+void uni(int a,int b){p[find(a)]=find(b);}
+int main(){
+    for(int i=0;i<5;i++) p[i]=i;
+    for(int i=0;i<E-1;i++) for(int j=i+1;j<E;j++) if(e[i].w>e[j].w){struct Edge t=e[i];e[i]=e[j];e[j]=t;}
+    int cost=0;
+    for(int i=0;i<E;i++) if(find(e[i].u)!=find(e[i].v)){
+        uni(e[i].u,e[i].v); cost+=e[i].w;
+        printf("%d-%d:%d\n",e[i].u,e[i].v,e[i].w);
+    }
+    printf("Total=%d\n",cost);
+}
