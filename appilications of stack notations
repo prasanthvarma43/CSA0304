@@ -1,0 +1,28 @@
+#include <stdio.h>
+#include <ctype.h>
+
+int precedence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+void infixToPostfix(char* exp) {
+    char stack[20]; int top = -1, i = 0;
+    char ch;
+    while ((ch = exp[i++]) != '\0') {
+        if (isalnum(ch)) printf("%c", ch);
+        else {
+            while (top != -1 && precedence(stack[top]) >= precedence(ch))
+                printf("%c", stack[top--]);
+            stack[++top] = ch;
+        }
+    }
+    while (top != -1) printf("%c", stack[top--]);
+}
+
+int main() {
+    char exp[] = "A+B*C";
+    infixToPostfix(exp);
+    return 0;
+}
