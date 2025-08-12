@@ -1,0 +1,15 @@
+#include <stdio.h>
+#define V 5
+#define INF 999
+int g[V][V]={{0,2,INF,6,INF},{2,0,3,8,5},{INF,3,0,INF,7},{6,8,INF,0,9},{INF,5,7,9,0}};
+int main(){
+    int vis[V]={0},edge=0,min,u,v,cost=0; vis[0]=1;
+    while(edge<V-1){
+        min=INF;
+        for(int i=0;i<V;i++) if(vis[i])
+            for(int j=0;j<V;j++) if(!vis[j] && g[i][j]<min){min=g[i][j];u=i;v=j;}
+        vis[v]=1; cost+=min; edge++;
+        printf("%d-%d:%d\n",u,v,min);
+    }
+    printf("Total=%d\n",cost);
+}
