@@ -1,0 +1,48 @@
+ #include <stdio.h>
+#include <stdlib.h>
+struct Node { int key; struct Node *left, *right; };
+struct Node* create(int k) {
+    struct Node* n = malloc(sizeof(struct Node));
+    n->key = k; n->left = n->right = NULL;
+    return n;
+}
+struct Node* insert(struct Node* root, int k) {
+    if (!root) return create(k);
+    if (k < root->key) root->left = insert(root->left, k);
+    else if (k > root->key) root->right = insert(root->right, k);
+    return root;
+}
+struct Node* minNode(struct Node* n) {
+    while (n && n->left) n = n->left;
+    return n;
+}
+struct Node* delete(struct Node* root, int k) {
+    if (!root) return root;
+    if (k < root->key) root->left = delete(root->left, k);
+    else if (k > root->key) root->right = delete(root->right, k);
+    else {
+        if (!root->left) return root->right;
+        if (!root->right) return root->left;
+        struct Node* t = minNode(root->right);
+        root->key = t->key;
+        root->right = delete(root->right, t->key);
+    }
+    return root;
+}
+struct Node* search(struct Node* root, int k) {
+    if (!root || root->key == k) return root;
+    return (k < root->key) ? search(root->left, k) : search(root->right, k);
+}
+void inorder(struct Node* root) {
+    if (root) { inorder(root->left); printf("%d ", root->key); inorder(root->right); }
+}
+int main() {
+    struct Node* root = NULL;
+    root = insert(root, 10);
+    root = insert(root, 20);
+    root = insert(root, 30);
+    printf("Inorder: "); inorder(root);
+    root = delete(root, 20);
+    printf("\nAfter delete: "); inorder(root);
+    printf("\nSearch 30: %s", search(root, 30) ? "Found" : "Not Found");
+}
